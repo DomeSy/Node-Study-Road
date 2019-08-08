@@ -1,5 +1,4 @@
 // Buffer:用于处理二进制
-
 // alloc:分配10个内存空间
 // 创建一个长度为10字节以0填充的Buffer 
 const buf1 = Buffer.alloc(10);
