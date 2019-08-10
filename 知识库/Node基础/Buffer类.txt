@@ -1,0 +1,13 @@
+Buffer类
+1>作用：用于操作二进制数据流
+2>我们在操作文件或者网络数据的时候，其实操作的就是二进制数据流，Node为我们提供了一个更加方便的去操作这种数据的类Buffer，它是一个全局的类
+3>三种创建方式：
+a. new Buffer(size):
+1)创建一个Buffer对象，并未这个对象分配一个大小
+2)size：长度
+b.new Buffer(array):
+1）如： new Buffer([1, 2, 3])
+c.new Buffer(string, [encoding]):
+1)string：字符串
+2)encoding: 编码
+4>Buffer 的 length 是字节长度，而普通的 length 是字符长度一个字节等于3个字节
