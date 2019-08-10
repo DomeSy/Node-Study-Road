@@ -1,0 +1,20 @@
+ Http模块：
+1>http模块主要用于创建http server服务
+a.支持更多特性
+b.不缓冲请求和响应
+c.处理流相关
+1>Http请求模块 
+a.用户通过浏览器发送一个http的请求到指定的主机
+b.服务器接收到该请求，对该请求进行分析和处理
+c.服务器处理完成以后，返回对应的数据到用户机器
+d.浏览器接受服务器返回的数据，并根据接收到的分析和处理
+2>数据通信的交互：
+a.由客户端发送一个http请求到指定的服务器
+b.服务器接收并处理请求
+c.返回数据到客户端
+3>引入：
+var http = requier('http');
+4>创建一个并返回HTTP服务器对象：
+var server = http.createServer( [ requestListener ] );
+a.requestListener: 监听到客户端链接的回调函数
+
