@@ -1,0 +1,35 @@
+内存占用和CPU占用率
+1>引入os ：const os = require('os');
+2>内存占用
+const mem = (os.freemem() / os.totalmem()) * 100;
+console.log(`内存占用${mem.toFixed(2)}%`); 
+a. os.freemem() 方法以整数的形式回空闲系统内存的字节数。
+b.os.totalmem() 方法以整数的形式返回所有系统内存的字节数
+c.toFixed(num) 方法可把 Number 四舍五入为指定小数位数的数字,num位0~20之间的数
+3>安装同级CPU占用率：npm i cpu-stat -s
+4>获取电脑cpu占用：
+const cpuStat = require('cpu-stat');
+cpuStat.usagePercent((err, percent) => {
+ 	 console.log(`CPU占用:${percent.toFixed(2)}%`);
+})
+5>第二种方法：util 方法进行包装,进行回调
+const util = require('util');
+const getCpu = util.promisify(cpuStat.usagePercent);
+getCpu().then(percent => {
+  console.log(`CPU占用:${percent.toFixed(2)}%`);
+});
+6>加入定时器显示
+const showStat = async() => {
+  const mem = (os.freemem() / os.totalmem()) * 100;
+  const percent = await getCpu();
+  console.log(`CPU占用:${percent.toFixed(2)}% 内存: ${mem} %`); 
+} 
+setInterval(showStat,1000);
+7>导出
+module.exports = { showStat }
+等价于
+module.exports.showStat = showStat
+8>在新文件内导入
+const { showStat } = require('./02-useModule');
+setImmediate( showStat );
+setImmediate：该方法用来把一些需要长时间运行的操作放在一个回调函数里,在浏览器完成后面的其他语句后,就立刻执行这个回调函数,
