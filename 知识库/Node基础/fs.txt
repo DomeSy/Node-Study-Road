@@ -1,0 +1,85 @@
+fs:
+1>fs(File System): 文件系统模块(核心模块)
+2>引入： var fs = require('fs')
+
+fs下的方法
+1>打开文件：
+a.异步：
+fs.open(path, flags, [mode], callback);
+1)path：要打开的文件路径(文件名)
+2)flags：打开文件的方式(r：只读， r+：读写)
+3)mode：设置文件的模式（二进制，读(4)、写(2)、执行(1)）
+4)callback(err, fs)
+err：文件打开失败的时候保存在err中，成功则为null
+fd：被打开文件的表示，类似于定时器，会累加
+b.同步：
+fs.openSync(path, flags, [mode])：正确则返回fd，否则返回error
+2>从指定的文档标识符fd，读取文件数据
+a.异步：
+fs.read(fd, buffer, offset, length, [position], callback)
+a.buffer：buffer对象
+b.offset：偏移量(新的内容添加buffer中的起始参数)
+c.length：buffer的长度
+d.position：位置(文件的读入的位置)或写null
+e.callback(err, length,buffer)
+b.同步：
+fs.readSync(fd, buffer, offset. length, position)：返回bytesRead的个数
+3>写入文件(此时是读写(r+)操作)
+a.异步：
+1）fs.write(fd, buffer, offset, [position], callback)
+2)   fs.write(fd, data, [position], [encoding], callback)
+b.同步：
+fs.writeSync(fd, buffer, offset, length, [position])
+4>关闭文件：必须在操作时完成
+1>异步：
+fs.close(fd, callback)
+2>同步：
+fs.closeSync(fd)
+5>将数据写入一个文件，如果不存在则新建，如果文件原先存在，则会替换
+a.异步：
+fs.weiteFile(filename, data, [options], callback)
+1)filename:文件名
+2)data:可以是一个string，也可以是一个原生buffer
+b.同步：
+fs.weiteFileSync(filename, data, [options])
+6>将数据添加到一个文件的尾部，如果文件不存在，会创建一个新的文件
+a.异步：
+fs.appendFile((filename), data, [option], callback)
+b.同步：
+fs.appendFileSync(filename, data, [options])
+7>判断文件是否存在：flase：不存在，true：存在
+a.异步：
+fs.existe(filename, function(isExists){ })
+b.同步：
+fs.readFileSync(filename, [option])
+8>删除一个文件
+1>异步：
+fs.unlink(path, callback)
+2>同步：
+fs.unlinkSync(path)
+9>重命名：
+1>异步：
+fs.rename(oldPath, newPath, callback)
+1)oldPath：旧的文件信息
+2)newPath：要更新的文件名
+2>同步：
+fs.renameSync(oldPath, newPath)
+10>监控：但不稳定，有问题
+fs.watch(filename, [options], [listener])
+如：fs.watch(filename, function(ev, fn){ })
+fn:发生改变的时候(不能保证每一次被改变)
+11>创建文件夹：
+1>异步：fs.mkdir(path, [mode], callback)
+2>同步：fs.mkdirSync(path, [mode])
+12>删除文件：
+1>异步：
+fs.remdir(path, callback)
+2>同步
+fs.remdirSync(path)
+13>读取文件夹
+1>异步：
+fs.readdir(path , callback)
+a.callback(err, filelist)：filelist:文件列表
+注：filelist中的mode显示的数字相当于fd
+其中：16822：文件夹  33206：文件
+2>同步：fs.readdirSync(path)
