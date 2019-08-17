@@ -1,0 +1,28 @@
+Restful风格
+1每一个url代表一种资源
+2客户端和服务器之间，传递这种资源的某种表现层
+3表现层状态转化(url设计-动宾结构）
+a.动词
+1)GET：读取(Read)
+2)POST：新建(Creat)
+3)PUT：更新(Update)
+4)DELETE：删除(Delete)
+b.宾语
+1)名词
+1_推荐
+GET users
+2_不推荐
+GET getUsers
+2)复数	
+1_推荐
+GET users
+GET users1
+2_不推荐
+GET user
+GET user1
+3)避免多级
+1_推荐
+GET authors12categories=2
+2_不推荐
+GET authors12categories2
+4状态码
