@@ -1,0 +1,22 @@
+请求行
+1Method
+a.GET：
+请求获取Request-URI所标识的资源
+b.POST：
+在Request-URI所标识的资源附加新的数据
+c.HEAD：
+请求获取由Request-URI所标识的资源的响应消息报头
+e.PUT：
+请求服务器存储一个资源，并由Request-URI作为其标识
+f.DELETE：
+请求服务器删除Request-URI所标识的资源
+g.TRACE：
+请求服务器会送收到的请求消息，主要用于测试或诊断
+h.CONNECT：
+保留将来使用
+i.OPTIONS：
+1)请求查询副武器的性能，或者查询与资源相关的选项和需求
+2)预检请求
+2RequestUrl
+3HttpVersuin：Http 1.1
+
