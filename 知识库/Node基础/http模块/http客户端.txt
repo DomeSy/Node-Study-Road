@@ -1,0 +1,129 @@
+http客户端
+http模块提供了两个函数http.request和http.get，作为客户端向http服务器发起请求。
+
+http.request(options,callback)
+1>发起http请求。
+2>接收两个参数：
+a.option是一个类似关联数组的对象，表示请求的参数
+b.callback是请求的回调函数
+3>option常用的参数如下：
+a.host：请求网站的域名或者ip地址
+b.port：请求网站的端口，默认是80
+c.path：请求的相对于根的路径，默认"/"。QueryString应该包含在其中，例如/search?query=will
+d.method：HTTP请求方法，默认为GET
+e.headers：一个关联数组对象，为请求头的内容
+4>callback传递一个参数为http.ClientResponse的实例
+5>http.request返回一个http.ClientRequest的实例
+6>clientRequest.js
+/// <reference path="typings/node/node.d.ts"/>
+var http=require('http');
+var querystring=require('querystring');
+
+//启动服务
+http.createServer(function(req,res){
+    console.log('请求到来，解析参数');
+
+    //解析post请求
+    var post='';
+
+    req.on('data',function(chunk){
+        post+=chunk;
+    });
+
+    req.on('end',function(){
+        post = querystring.parse(post);
+
+        //解析完成
+        console.log('参数解析完成，返回name参数');
+        res.end(post.name);
+    });
+
+}).listen(3000);
+
+
+// 客户端请求
+var contents =querystring.stringify({
+    name:'will',
+    age:21,
+    address:'shanghai'
+});
+
+//声明请求参数
+var options={
+    host:'localhost',
+    path:'/',
+    port:3000,
+    method:'POST',
+    headers:{
+        'Content-Type':'application/x-www-form-urlencoded',
+        'Content-length':contents.length
+    }
+};
+
+//发送请求
+var req=http.request(options,function(res){
+    res.setEncoding('utf-8');
+    res.on('data',function(data){
+        console.log('后台返回数据');
+        console.log(data);
+    }) 
+});
+
+req.write(contents);
+
+//必须结束
+req.end();
+7>结果
+
+
+http.get
+1>它是http.request的简化版，唯一的区别在于http.get自动将请求方法设为GET请求，同时不需要手动调用req.end()
+2>clientGet.js
+///<reference path="typings/node/node.d.ts"/>
+var http = require('http');
+var url = require('url');
+var util = require('util');
+
+//启动服务
+http.createServer(function(req,res){
+    console.log('请求到来 解析参数');
+    var params =url.parse(req.url,true);
+    console.log('解析完成');
+    console.log(util.inspect(params));
+    console.log('向客户端返回');
+    res.end(params.query.name);
+}).listen(3000);
+
+//客户端请求
+http.get({
+    host:'localhost',
+    path:'/user?name=will&age=21',
+    port:3000},
+    function (res) {
+        res.setEncoding('utf-8');
+        res.on('data',function (data) {
+            console.log('服务端返回响应回来的数据'+data);
+        })
+});
+3>结果
+
+
+http.ClientRequest
+1>该对象还是由http.request或http.get返回产生对象，表示一个已经产生而且真正进行的HTTP请求 ，它提供了response事件，即http.request或http.get 第二个参数指定的回调函数的绑定对象，请求必须调用end方法结束请求。
+2>提供的函数：
+a.request.abort() ：终止正在发送的请求
+b.request.setTimeout(timeout,[callback])：设置请求超时时间，timeout为毫秒数，当请求超时后，callback将会被调用
+c.其他：request.setNoDelay([noDelay])、request.setSocketKeepAlive([enable],[initialDelay])等函数
+
+http.ClientResponse
+1>http.ClientResponse是与http.ServerResponse相似，提供三个事件。data事件、end事件和close事件分别在数据到达、数据传输完成和连接结束时触发，其中data事件传递一个参数chunk，表示接收到的数据
+2>属性：表示请求结果的状态
+a.statusCode：HTTP状态码，如200，404，500
+b.httpVersion：HTTP协议版本
+c.headers：http请求头
+e.trailers：http请求尾
+
+3>函数：
+a.response.setEncoding([encoding])：设置默认的编码，当data事件被触发时，数据将以encoding编码，默认值为null，以buffer的形式存储
+b.response.pause() ：暂停以接受数据和发送事件，方便实现下载功能
+c.response.resume()：从暂停的状态中恢复
