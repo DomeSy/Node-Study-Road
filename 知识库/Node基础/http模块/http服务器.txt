@@ -1,0 +1,28 @@
+http服务器
+a.http.Server实现的，它提供了一套封装级别很低的API，仅仅是流控制和简单的解析，所有的高层功能都需要通过它的接口。
+b.例子：
+//引入模块
+var http = require('http');
+
+// 创建服务
+http.createServer(function(req, res) {
+
+    //响应头
+    res.writeHead(200, {'Content-Type':'text/html'});
+
+    //响应内容
+    res.write('<h1>Node.js</h1>');
+
+    //结束响应
+    res.end('<p>will will be well </p> ');
+
+//监听端口
+}).listen(3000);
+
+console.log('http server is listening at port 3000');
+c.代码分析：
+1)http.createServer创建了一个http.Server的实例，将一个函数作为http请求处理函数，这个函数接受两个参数：请求对象req和响应对象res。
+2)res显式写入了，响应代码200（表示请求成功），指定响应头，写入响应体，调用end结束并且发送。
+3)该实例调用listen函数，启动服务器并且监听3000端口。
+d.结果
+
