@@ -1,0 +1,78 @@
+url模块
+1>由于GET请求直接被嵌入在路径中，URL是完整的请求路径，包括了?后面的部分，因此你可以手动解析后面的内容作为GET请求的参数。
+2>url 模块中的 parse 函数可以用于解析url中的参数。
+
+url.parse(urlStr, [parseQueryString], [slashesDenoteHost])
+1>参数使用说明如下：
+a.urlStr - 需要接收的url字符串。
+b.parseQueryString  - 为true时将使用查询模块分析查询字符串，默认为false。
+c.shashesDenoteHost        
+1)默认为false，//foo/bar 形式的字符串将被解释成 { pathname: ‘//foo/bar' }
+2)如果设置成true，//foo/bar 形式的字符串将被解释成  { host: ‘foo', pathname: ‘/bar' }
+2>urlcontent.js
+var http = require('http');
+var url = require('url');
+var util = require('util');
+
+http.createServer(function (req, res) {
+    res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.write('url:'+req.url+'\n\n');
+    res.write(util.inspect(url.parse(req.url, true))+'\n\n');
+
+    var params = url.parse(req.url, true).query;
+    res.write("name：" + params.name + '\n');
+    res.write("age：" + params.age + '\n');
+
+    var pathname = url.parse(req.url, true).pathname;
+    res.write('pathname:' + pathname + '\n');
+
+    var path = url.parse(req.url, true).path;
+    res.write('path:' + path);
+    res.end();
+}).listen(3000);
+3>在浏览器中输入以下地址：localhost:3000/user?name=dragon&age=18	
+显示结果如下：
+
+模拟from表单
+1>index.html
+<html>
+<head>
+    <title>test</title>
+</head>
+<body>
+    <form action="http://localhost:3000" method="GET">
+        <table border="0">
+            <tr>
+                <td>username：</td>
+                <td><input type="text" name="username"><br/></td>
+            </tr>
+            <tr>
+                <td>password：</td>
+                <td><input type="text" name="password"><br/></td>
+            </tr>
+            <tr>
+                <td align="center" colspan="2"><input type="submit" name="" value="提交"></td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>
+2>server.js
+var http = require("http");
+var url = require("url");
+var server = http.createServer(function (req, res) {
+
+var queryObj = url.parse(req.url, true).query;
+var username = queryObj.username;
+var password = queryObj.password;
+ 
+res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
+res.write('server received form request:\n\n');
+res.write('username:'+username+'\n\n'+'password:'+password);
+res.end();
+});
+server.listen(3000);
+3>运行后
+
+
+
